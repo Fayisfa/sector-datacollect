@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sector Committee Form | Kerala Connect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f8fafc;
+        color: #1e293b;
+      }
+      .form-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        padding: 2rem;
+        margin-bottom: 2rem;
+      }
+      .section-border {
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+      }
+      .input-field {
+        width: 100%;
+        padding: 0.75rem;
+        border-radius: 6px;
+        border: 1px solid #cbd5e1;
+        background: white;
+        transition: all 0.2s;
+      }
+      .input-field:focus {
+        outline: none;
+        border-color: #60a5fa;
+        box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+      }
+      .btn-primary {
+        background: linear-gradient(to right, #3b82f6, #2563eb);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.2s;
+      }
+      .btn-primary:hover {
+        background: linear-gradient(to right, #2563eb, #1d4ed8);
+        transform: translateY(-1px);
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        background: #e0f2fe;
+        color: #0369a1;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+      .chip button {
+        margin-left: 0.5rem;
+        color: #0ea5e9;
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+      .logo-container {
+        background: white;
+        padding: 1rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        display: inline-block;
+        margin-bottom: 1.5rem;
+      }
+      .header-title {
+        background: linear-gradient(to right, #3b82f6, #2563eb);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        font-weight: 700;
+      }
+      .form-header {
+        border-bottom: 1px solid #e2e8f0;
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      .required:after {
+        content: " *";
+        color: #ef4444;
+      }
+      .success-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+      .modal-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+      }
+      .loading-spinner {
+        display: inline-block;
+        width: 1rem;
+        height: 1rem;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s ease-in-out infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body class="min-h-screen py-8 px-4">
+    <div class="w-full max-w-2xl mx-auto">
+      <!-- Logo and Header -->
+      <div class="text-center mb-8">
+        <div class="flex justify-center mb-4">
+          <img
+            src="./logo (1).svg"
+            width="180px"
+            height="auto"
+            alt="Kerala Connect Logo"
+          />
+        </div>
+        <h1 class="text-3xl font-bold header-title mb-2">
+          Sector Committee Data Collection
+        </h1>
+        <p class="text-slate-500">
+          Please fill all required fields to submit sector committee details
+        </p>
+      </div>
+
+      <!-- Form Card -->
+      <div class="form-card">
+        <div class="form-header">
+          <h2 class="text-xl font-bold text-slate-800">
+            Committee Information
+          </h2>
+        </div>
+
+        <form id="committeeForm" class="space-y-6">
+          <input type="hidden" name="formType" value="committee" />
+
+          <!-- Location Section -->
+          <div class="section-border p-5">
+            <h3
+              class="text-lg font-semibold text-slate-700 mb-4 flex items-center"
+            >
+              <i class="fas fa-map-marker-alt text-blue-500 mr-2"></i> Location
+              Details
+            </h3>
+
+            <div class="grid grid-cols-1 gap-4">
+              <!-- District Dropdown -->
+              <div>
+                <label
+                  for="district"
+                  class="block text-sm font-medium text-slate-600 mb-1 required"
+                  >District</label
+                >
+                <div class="relative">
+                  <select
+                    id="district"
+                    name="district"
+                    class="input-field appearance-none"
+                    required
+                  >
+                    <option value="" disabled selected>Select District</option>
+                    <!-- Options will be loaded dynamically -->
+                  </select>
+                  <div
+                    class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
+                  >
+                    <i class="fas fa-chevron-down text-slate-400"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Division Dropdown -->
+              <div>
+                <label
+                  for="division"
+                  class="block text-sm font-medium text-slate-600 mb-1 required"
+                  >Division</label
+                >
+                <div class="relative">
+                  <select
+                    id="division"
+                    name="division"
+                    class="input-field appearance-none"
+                    disabled
+                    required
+                  >
+                    <option value="" disabled selected>
+                      Select District first
+                    </option>
+                  </select>
+                  <div
+                    class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
+                  >
+                    <i class="fas fa-chevron-down text-slate-400"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sector Dropdown -->
+              <div>
+                <label
+                  for="sector"
+                  class="block text-sm font-medium text-slate-600 mb-1 required"
+                  >Sector</label
+                >
+                <div class="relative">
+                  <select
+                    id="sector"
+                    name="sector"
+                    class="input-field appearance-none"
+                    disabled
+                    required
+                  >
+                    <option value="" disabled selected>
+                      Select Division first
+                    </option>
+                  </select>
+                  <div
+                    class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
+                  >
+                    <i class="fas fa-chevron-down text-slate-400"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Committee Members Section -->
+          <div class="section-border p-5">
+            <h3
+              class="text-lg font-semibold text-slate-700 mb-4 flex items-center"
+            >
+              <i class="fas fa-users text-blue-500 mr-2"></i> Committee Members
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- President -->
+              <div>
+                <label
+                  for="president"
+                  class="block text-sm font-medium text-slate-600 mb-1 required"
+                  >President</label
+                >
+                <input
+                  type="text"
+                  id="president"
+                  name="president"
+                  class="input-field"
+                  placeholder="Enter president's name"
+                  required
+                />
+              </div>
+
+              <!-- General Secretary -->
+              <div>
+                <label
+                  for="genSecretary"
+                  class="block text-sm font-medium text-slate-600 mb-1 required"
+                  >General Secretary</label
+                >
+                <input
+                  type="text"
+                  id="genSecretary"
+                  name="genSecretary"
+                  class="input-field"
+                  placeholder="Enter general secretary's name"
+                  required
+                />
+              </div>
+
+              <!-- Finance Secretary -->
+              <div>
+                <label
+                  for="financeSec"
+                  class="block text-sm font-medium text-slate-600 mb-1 required"
+                  >Finance Secretary</label
+                >
+                <input
+                  type="text"
+                  id="financeSec"
+                  name="financeSec"
+                  class="input-field"
+                  placeholder="Enter finance secretary's name"
+                  required
+                />
+              </div>
+
+              <!-- Quality and Development -->
+              <div>
+                <label
+                  for="qualityDev"
+                  class="block text-sm font-medium text-slate-600 mb-1 required"
+                  >Quality & Development</label
+                >
+                <input
+                  type="text"
+                  id="qualityDev"
+                  name="qualityDev"
+                  class="input-field"
+                  placeholder="Enter name"
+                  required
+                />
+              </div>
+
+              <!-- Growth and Development -->
+              <div>
+                <label
+                  for="growthDev"
+                  class="block text-sm font-medium text-slate-600 mb-1 required"
+                  >Growth & Development</label
+                >
+                <input
+                  type="text"
+                  id="growthDev"
+                  name="growthDev"
+                  class="input-field"
+                  placeholder="Enter name"
+                  required
+                />
+              </div>
+
+              <!-- WEFI -->
+              <div>
+                <label
+                  for="wefi"
+                  class="block text-sm font-medium text-slate-600 mb-1 required"
+                  >WEFI</label
+                >
+                <input
+                  type="text"
+                  id="wefi"
+                  name="wefi"
+                  class="input-field"
+                  placeholder="Enter WEFI coordinator's name"
+                  required
+                />
+              </div>
+
+              <!-- Smart Core -->
+              <div>
+                <label
+                  for="smartCore"
+                  class="block text-sm font-medium text-slate-600 mb-1 required"
+                  >Smart Core</label
+                >
+                <input
+                  type="text"
+                  id="smartCore"
+                  name="smartCore"
+                  class="input-field"
+                  placeholder="Enter smart core coordinator's name"
+                  required
+                />
+              </div>
+
+              <!-- Students Primary -->
+              <div>
+                <label
+                  for="studentsPrimary"
+                  class="block text-sm font-medium text-slate-600 mb-1 required"
+                  >Students Primary</label
+                >
+                <input
+                  type="text"
+                  id="studentsPrimary"
+                  name="studentsPrimary"
+                  class="input-field"
+                  placeholder="Enter students primary coordinator's name"
+                  required
+                />
+              </div>
+
+              <!-- Kalayalam -->
+              <div>
+                <label
+                  for="kalayalam"
+                  class="block text-sm font-medium text-slate-600 mb-1 required"
+                  >Kalayalam</label
+                >
+                <input
+                  type="text"
+                  id="kalayalam"
+                  name="kalayalam"
+                  class="input-field"
+                  placeholder="Enter kalayalam coordinator's name"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Notes -->
+          <div class="section-border p-5">
+            <h3
+              class="text-lg font-semibold text-slate-700 mb-4 flex items-center"
+            >
+              <i class="fas fa-edit text-blue-500 mr-2"></i> Additional
+              Information
+            </h3>
+            <div>
+              <label
+                for="notes"
+                class="block text-sm font-medium text-slate-600 mb-1"
+                >Notes</label
+              >
+              <textarea
+                id="notes"
+                name="notes"
+                class="input-field"
+                rows="3"
+                placeholder="Any additional notes or comments..."
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Form Actions -->
+          <div
+            class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2"
+          >
+            <button
+              type="reset"
+              class="w-full sm:w-auto input-field border border-slate-300 hover:border-blue-400 bg-slate-50 hover:bg-slate-100"
+            >
+              <i class="fas fa-redo mr-2"></i> Reset Form
+            </button>
+            <button type="submit" class="w-full sm:w-auto btn-primary">
+              <i class="fas fa-save mr-2"></i> Submit Committee Data
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="mt-8 text-center text-sm text-slate-500">
+        <p>© 2025 Kerala Connect. All rights reserved. SSF Kerala</p>
+      </div>
+    </div>
+
+    <script>
+      // Your existing script with modifications for the committee form
+      document.addEventListener("DOMContentLoaded", () => {
+        const districtSelect = document.getElementById("district");
+        const divisionSelect = document.getElementById("division");
+        const sectorSelect = document.getElementById("sector");
+
+        // Initialize selects
+        divisionSelect.disabled = true;
+        sectorSelect.disabled = true;
+        divisionSelect.innerHTML =
+          '<option value="" disabled selected>Select District first</option>';
+        sectorSelect.innerHTML =
+          '<option value="" disabled selected>Select division first</option>';
+
+        // Function to handle fetch errors
+        const handleFetch = async (url) => {
+          try {
+            const response = await fetch(url);
+            const text = await response.text();
+
+            // Try to parse JSON
+            try {
+              return JSON.parse(text);
+            } catch (e) {
+              console.error("Failed to parse JSON:", text);
+              throw new Error("Invalid JSON response");
+            }
+          } catch (error) {
+            console.error("Fetch error:", error);
+            throw error;
+          }
+        };
+
+        // Load Districts from API
+        handleFetch("get_districts.php")
+          .then((districts) => {
+            districtSelect.innerHTML =
+              '<option value="" disabled selected>Select District</option>';
+            districts.forEach((d) => {
+              const option = new Option(d.name, d.id);
+              districtSelect.add(option);
+            });
+          })
+          .catch((error) => {
+            console.error("Error loading districts:", error);
+            districtSelect.innerHTML =
+              '<option value="" disabled selected>Error loading districts</option>';
+          });
+
+        // Load Divisions when District is selected
+        districtSelect.addEventListener("change", () => {
+          const districtId = districtSelect.value;
+          divisionSelect.disabled = true;
+          sectorSelect.disabled = true;
+
+          divisionSelect.innerHTML =
+            '<option value="" disabled selected>Loading divisions...</option>';
+          sectorSelect.innerHTML =
+            '<option value="" disabled selected>Select division first</option>';
+
+          if (districtId) {
+            handleFetch(`get_divisions.php?districtId=${districtId}`)
+              .then((divisions) => {
+                divisionSelect.disabled = false;
+                divisionSelect.innerHTML =
+                  '<option value="" disabled selected>Select Division</option>';
+
+                if (divisions.length > 0) {
+                  divisions.forEach((d) => {
+                    const option = new Option(d.division, d.id);
+                    divisionSelect.add(option);
+                  });
+                } else {
+                  divisionSelect.innerHTML =
+                    '<option value="" disabled selected>No divisions found</option>';
+                }
+              })
+              .catch((error) => {
+                console.error("Error loading divisions:", error);
+                divisionSelect.innerHTML =
+                  '<option value="" disabled selected>Error loading divisions</option>';
+              });
+          }
+        });
+
+        // Load Sectors when Division is selected
+        divisionSelect.addEventListener("change", () => {
+          const divisionId = divisionSelect.value;
+          sectorSelect.disabled = true;
+
+          sectorSelect.innerHTML =
+            '<option value="" disabled selected>Loading sectors...</option>';
+
+          if (divisionId) {
+            handleFetch(`get_sectors.php?divisionId=${divisionId}`)
+              .then((sectors) => {
+                sectorSelect.disabled = false;
+                sectorSelect.innerHTML =
+                  '<option value="" disabled selected>Select Sector</option>';
+
+                if (sectors.length > 0) {
+                  sectors.forEach((s) => {
+                    const option = new Option(s.sector, s.id);
+                    sectorSelect.add(option);
+                  });
+                } else {
+                  sectorSelect.innerHTML =
+                    '<option value="" disabled selected>No sectors found</option>';
+                }
+              })
+              .catch((error) => {
+                console.error("Error loading sectors:", error);
+                sectorSelect.innerHTML =
+                  '<option value="" disabled selected>Error loading sectors</option>';
+              });
+          }
+        });
+      });
+
+      // Form submission for committee form
+      document
+        .getElementById("committeeForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          // At the start of form submission
+          const submitBtn = document.querySelector(
+            '#committeeForm button[type="submit"]'
+          );
+          const originalText = submitBtn.innerHTML;
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = `
+          <span class="loading-spinner"></span> Processing...
+        `;
+
+          // Create form data
+          const formData = {
+            formType: "committee",
+            district: document.getElementById("district").value,
+            division: document.getElementById("division").value,
+            sector: document.getElementById("sector").value,
+            president: document.getElementById("president").value,
+            genSecretary: document.getElementById("genSecretary").value,
+            financeSec: document.getElementById("financeSec").value,
+            qualityDev: document.getElementById("qualityDev").value,
+            growthDev: document.getElementById("growthDev").value,
+            wefi: document.getElementById("wefi").value,
+            smartCore: document.getElementById("smartCore").value,
+            studentsPrimary: document.getElementById("studentsPrimary").value,
+            kalayalam: document.getElementById("kalayalam").value,
+            notes: document.getElementById("notes").value,
+          };
+
+          // Get display names for district, division, sector
+          formData.districtName =
+            document.getElementById("district").options[
+              document.getElementById("district").selectedIndex
+            ].text;
+          formData.divisionName =
+            document.getElementById("division").options[
+              document.getElementById("division").selectedIndex
+            ].text;
+          formData.sectorName =
+            document.getElementById("sector").options[
+              document.getElementById("sector").selectedIndex
+            ].text;
+
+          // Use Google Apps Script endpoint
+          fetch(
+            "https://script.google.com/macros/s/AKfycbwytmOoQa9vCuhAyWn-OXhNsl3pU8D-Sl-eWJq03qdEDdRwCQIjw-EDDIdh7DkpsHJz/exec",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
+            }
+          )
+            .then((response) => {
+              if (!response.ok) throw new Error("Network response was not ok");
+              return response.json(); // or response.text() depending on your script response
+            })
+            .then((data) => {
+              showSuccessModal("Committee data submitted successfully!");
+              document.getElementById("committeeForm").reset();
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              showAlert("Submission failed. Please try again later.");
+            })
+            .finally(() => {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = originalText;
+            });
+        });
+
+      function showSuccessModal(message) {
+        const modal = document.createElement("div");
+        modal.className = "success-modal";
+        modal.innerHTML = `
+          <div class="modal-content">
+            <i class="fas fa-check-circle text-green-500 text-5xl mb-4"></i>
+            <h3 class="text-xl font-bold mb-2">Success!</h3>
+            <p class="mb-4">${message}</p>
+          </div>
+        `;
+        document.body.appendChild(modal);
+
+        // Remove modal after 5 seconds
+        setTimeout(() => {
+          modal.remove();
+        }, 5000);
+      }
+
+      function showAlert(message) {
+        const alertDiv = document.createElement("div");
+        alertDiv.className =
+          "mb-4 p-4 bg-red-900 border border-red-700 text-white rounded-lg relative";
+        alertDiv.role = "alert";
+        alertDiv.innerHTML = `
+                  <span class="block sm:inline">${message}</span>
+                  <span class="absolute top-0 bottom-0 right-0 px-4 py-3 alert-close">
+                    <svg class="fill-current h-6 w-6 text-red-400" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                      <title>Close</title>
+                      <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/>
+                    </svg>
+                  </span>
+                `;
+
+        const container =
+          document.querySelector("#committeeForm").parentElement;
+        container.prepend(alertDiv);
+
+        alertDiv.querySelector(".alert-close").addEventListener("click", () => {
+          alertDiv.remove();
+        });
+
+        setTimeout(() => {
+          if (document.body.contains(alertDiv)) {
+            alertDiv.remove();
+          }
+        }, 5000);
+      }
+    </script>
+  </body>
+</html>
